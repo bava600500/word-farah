@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>حب عباس وفرح</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Tahoma", system-ui, sans-serif;
+            background-color: #ffc0cb; /* خلفية وردية */
+        }
+
+        .screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
+            padding: 20px 24px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        h1, h2, h3 {
+            margin-top: 0;
+        }
+
+        input[type="password"] {
+            padding: 10px;
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid #ff99bb;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        button {
+            margin-top: 12px;
+            padding: 10px 20px;
+            border-radius: 999px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #ff76a8;
+            color: white;
+            transition: transform 0.1s, box-shadow 0.1s, opacity 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: default;
+            box-shadow: none;
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+        }
+
+        button:active:not(:disabled) {
+            transform: translateY(1px);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .error {
+            color: #c70039;
+            margin-top: 8px;
+            font-size: 14px;
+        }
+
+        .menu-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .menu-options button {
+            width: 100%;
+            text-align: center;
+        }
+
+        .emoji-banner {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        /* شاشة التحميل */
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #ffe4f0;
+            border-top: 4px solid #ff4f88;
+            border-radius: 50%;
+            margin: 16px auto 0;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* خلفيات القصص المختلفة */
+        .story1 {
+            background: radial-gradient(circle at top, #ffe4f7, #ffb6c1, #ff9bbd);
+        }
+
+        .story2 {
+            background: radial-gradient(circle at top, #ffe6f2, #ffc0cb, #ff9bd5);
+        }
+
+        .story3 {
+            background: radial-gradient(circle at top, #ffb3b3, #ffcccc, #ffe6f2);
+        }
+
+        .story4 {
+            background: radial-gradient(circle at top, #ffe0f2, #ffc0cb, #ffd6e8);
+        }
+
+        .story5 {
+            background: radial-gradient(circle at top, #ffd1e8, #ffc0cb, #ffb6d9);
+        }
+
+        .story6 {
+            background: radial-gradient(circle at top, #ff4f88, #c2185b, #880e4f);
+            color: white;
+        }
+
+        .story-text {
+            font-size: 18px;
+            line-height: 1.8;
+            white-space: pre-line;
+        }
+
+        .back-btn {
+            background-color: #ff8db8;
+            margin-top: 18px;
+        }
+
+        .big-message {
+            font-size: 26px;
+            line-height: 2;
+            white-space: pre-line;
+        }
+
+        .hearts-bg {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- شاشة كلمة السر -->
+    <div id="password-screen" class="screen">
+        <div class="card">
+            <h1>💗 أهلاً بعالم عباس وفرح 💗</h1>
+            <p>دخل كلمة السر السريّة حتى تدخل لعالم حبهم 🫢</p>
+            <input id="password-input" type="password" placeholder="اكتب كلمة السر هنا">
+            <br>
+            <button id="password-btn">دخول</button>
+            <div id="password-error" class="error"></div>
+        </div>
+    </div>
+
+    <!-- شاشة الخيارات -->
+    <div id="menu-screen" class="screen hidden">
+        <div class="card">
+            <h2>شتريد؟ 🥺💗</h2>
+            <p>اختار وحده من هذولة وخل نشوف السالفة 😏</p>
+            <div class="menu-options">
+                <button data-option="1">١. اعرف قصة حب عباس وفرح</button>
+                <button data-option="2">٢. اعرف عن أطفالهم</button>
+                <button data-option="3">٣. اعرف عن مستقبلهم</button>
+                <button data-option="4">٤. اعرف عن فرح</button>
+                <button data-option="5">٥. اعرف عن عباس</button>
+                <button data-option="6">٦. رسالة لفرح</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- شاشة التحميل -->
+    <div id="loading-screen" class="screen hidden">
+        <div class="card">
+            <div class="emoji-banner">❤️💋❤️💋❤️</div>
+            <h2>اصبر خلحجيلك حبهم الحلو 😌</h2>
+            <p>5 ثواني بس وراح يوصلك كلشي عن حب عباس وفرح…</p>
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <!-- شاشة القصة / الرسالة -->
+    <div id="story-screen" class="screen hidden">
+        <div class="card">
+            <div id="story-emojis" class="hearts-bg"></div>
+            <h2 id="story-title"></h2>
+            <p id="story-text" class="story-text"></p>
+            <button class="back-btn" id="back-btn">رجوع للخيارات</button>
+        </div>
+    </div>
+
+    <script>
+        // صوت الزر (بييب صغير)
+        let audioCtx = null;
+        function playClickSound() {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = "triangle";
+                osc.frequency.value = 600; // تونة بسيطة
+                gain.gain.value = 0.12;
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                setTimeout(() => {
+                    osc.stop();
+                }, 80); // 0.08 ثانية
+            } catch (e) {
+                // إذا صار خطأ نتجاهله، مو مهم
+            }
+        }
+
+        const passwordScreen = document.getElementById("password-screen");
+        const menuScreen = document.getElementById("menu-screen");
+        const loadingScreen = document.getElementById("loading-screen");
+        const storyScreen = document.getElementById("story-screen");
+
+        const passwordInput = document.getElementById("password-input");
+        const passwordBtn = document.getElementById("password-btn");
+        const passwordError = document.getElementById("password-error");
+
+        const storyTitle = document.getElementById("story-title");
+        const storyText = document.getElementById("story-text");
+        const storyEmojis = document.getElementById("story-emojis");
+        const backBtn = document.getElementById("back-btn");
+
+        const CORRECT_PASSWORD = "farah2006";
+
+        const stories = {
+            1: {
+                title: "قصة حب عباس وفرح 💞",
+                text: "خلحجيلك تعال عباس نبدي بي يحب فرح هوايي جمعتهم الصدف وصار مهووس بيها، اسمها ما يروح من باله، حارب الدنيا علمودها وهيه بنته حبيبته ويموت عليها.\n\nحضرته مره ورجعلها بعد شهر وكسب قلبها وحبها، ورجعت انتهت قصتهم لفترة بس عباس حاول ويه فرح وراح يبقه يحاول لآخر العمر.\n\nوفرح تحب عباس، هوه أبوها وحبيبها وزوجها، تخاف عليه وتغار عليه، جانت ما تريد يحبها خافت يشوف خبالها وما تدري إنو هوه عاشق لخبالها 🫢🫢😂",
+                className: "story1",
+                emojis: "❤️💋❤️💋❤️"
+            },
+            2: {
+                title: "أطفالهم روح وجمرة وغيث 👨‍👩‍👧‍👧",
+                text: "أطفالهم روح وجمرة وغيث 💗\n\nروح وجمرة يشبهن أمهم، أشكد حلوات ونقيات، وأشكد عباس يموت عليهن وعلى أمهن.\n\nغيث عصبي مثل أبوه 😅، يحب أمه وأبوه وشجاع… ليش؟ لأن تربيه فرح الحلوة اللي علمته شلون يكون قوي وحنون بنفس الوقت 💞",
+                className: "story2",
+                emojis: "💗👧👧👦💗"
+            },
+            3: {
+                title: "مستقبل عباس وفرح 🔮",
+                text: "عباس يريد يتزوج فرح، ومو بس يريد… لو هيه لو ماكو 💍\n\nيريد يكون الأول بهواي مجالات، وهوه كذلك: أمن سيبراني، أمن معلومات، وشخص طموح، وراه ابنه ومره عظيمة وهيه فرح.\n\nفرح الحلوة مالت عباس تريد تصير ضابطة، وعباس يدعمها بكل قراراتها ويحبها وهي تحبه، وكل واحد بيهم سند للثاني 🌹",
+                className: "story3",
+                emojis: "❤️💄💋"
+            },
+            4: {
+                title: "عن فرح الجميلة 🌸",
+                text: "فرح عاشت طفولة مو حلوة… بس إجه ليعوضها عن كل هالطفولة أبوها وحبيبها عباس.\n\nمستحيل يخلي أحد يلمسها، فرح دلوعه وخبلة وشطورة وطموحة، عباس فخور بيها وبكلشي جاي تسويه.\n\nيريد تكون أحلى وأفضل إنسانة، وهيه كذلك جاي تدرس وهيه بسادس، وعمرها 19، وعباس مهووس بيها 🥺💗",
+                className: "story4",
+                emojis: "🌸💗🌸"
+            },
+            5: {
+                title: "عن عباس الطموح 🧠",
+                text: "عباس شخص طموح، عنده مجالات عديدة منها:\n\n- أمن سيبراني\n- أمن معلومات\n- مسوّق\n- مروّج\n- هندسة اجتماعية\n- إلى آخره…\n\nوهوه يحب فرح ويعتبرها سنده بهالدنيا، عباس بالرابع علمي وعمره 16 سنة، يحب فرح هواي ويريد بس فرحتها.\n\nهوه جاي يسوي كل هذا لأنها حبيبته وعشقه، وعباس عاش أيضاً أشياء جارحة، وأجاه عوض وسند وهدية من رب العالمين وهيه فرح 🫂💋",
+                className: "story5",
+                emojis: "💪💗🫂"
+            },
+            6: {
+                title: "رسالة لفرح 🥺💌",
+                text: "محد يستاهل هذا كله غيرج…\n\nأحبج من كل نفس بيه محححح 💗💗💗",
+                className: "story6",
+                emojis: "💖💖💖"
+            }
+        };
+
+        function showScreen(screen) {
+            // إخفاء الكل
+            passwordScreen.classList.add("hidden");
+            menuScreen.classList.add("hidden");
+            loadingScreen.classList.add("hidden");
+            storyScreen.classList.add("hidden");
+
+            // إظهار المطلوب
+            screen.classList.remove("hidden");
+        }
+
+        // التحقق من كلمة السر مع تأخير بسيط
+        passwordBtn.addEventListener("click", function () {
+            playClickSound();
+
+            passwordError.textContent = "";
+            const val = passwordInput.value.trim();
+
+            passwordBtn.disabled = true;
+            const originalText = passwordBtn.textContent;
+            passwordBtn.textContent = "جاري التحقق...";
+
+            setTimeout(() => {
+                if (val === CORRECT_PASSWORD) {
+                    showScreen(menuScreen);
+                } else {
+                    passwordError.textContent = "كلمة السر غلط حبي 😔 جرّب مره ثانية (تلميح: farah2006)";
+                }
+                passwordBtn.disabled = false;
+                passwordBtn.textContent = originalText;
+            }, 1200); // تأخير تقريباً 1.2 ثانية
+        });
+
+        // دخول بالإنتر
+        passwordInput.addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+                passwordBtn.click();
+            }
+        });
+
+        // أزرار القائمة
+        document.querySelectorAll(".menu-options button").forEach(btn => {
+            btn.addEventListener("click", () => {
+                playClickSound();
+                const opt = parseInt(btn.getAttribute("data-option"), 10);
+                handleOption(opt);
+            });
+        });
+
+        function handleOption(option) {
+            if (option === 1) {
+                // خيار قصة الحب – يمر بشاشة تحميل أولاً
+                showScreen(loadingScreen);
+                setTimeout(() => {
+                    renderStory(1);
+                }, 5000); // 5 ثواني
+            } else {
+                renderStory(option);
+            }
+        }
+
+        function renderStory(option) {
+            const data = stories[option];
+            if (!data) return;
+
+            // تغيير خلفية الشاشة حسب القصة
+            storyScreen.className = "screen " + data.className;
+
+            storyTitle.textContent = data.title;
+            storyText.textContent = data.text;
+            storyEmojis.textContent = data.emojis;
+
+            showScreen(storyScreen);
+        }
+
+        backBtn.addEventListener("click", () => {
+            playClickSound();
+            // رجوع للقائمة وترجع الخلفية وردية بسيطة
+            storyScreen.className = "screen";
+            showScreen(menuScreen);
+        });
+    </script>
+</body>
+</html>
